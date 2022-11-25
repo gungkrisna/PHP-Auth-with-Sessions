@@ -7,6 +7,7 @@
     }
 
 	if(isset($_GET['logout'])){
+        session_unset($username);
         session_destroy();
 		header("location: login/");	exit();
 	}
@@ -15,7 +16,7 @@
     $stored_accounts = json_decode(file_get_contents($storage), true);
 
     foreach($stored_accounts as $key => $entry) {
-        if ($entry['username'] == $_SESSION['username']) {
+        if ($entry['username'] == $username) {
             $name = explode(" ", $stored_accounts[$key]['name']);
             $email = $stored_accounts[$key]['email'];
             $last_login = $stored_accounts[$key]['last_login'];
@@ -62,7 +63,7 @@
 
             <div class="auth-user">
                 <div class="avatar avatar-xs status status-online">
-                    <div class="avatar-title"><?php echo $name[0][0]; echo $name[1][0]; ?></div>
+                    <div class="avatar-title"><?php echo $name[0][0]; echo $name[1][0] ?? null; ?></div>
                 </div>
                 <span class="auth-user-fullname ms-3">@<?php echo $username ?></span>
                 <span class="auth-user-activity">Last Login: <?php echo date('d/m/Y H:i:s', $last_login) ?></span>
